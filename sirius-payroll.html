@@ -9,25 +9,23 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: #07111f; color: #ddd9cf; font-family: 'Barlow', sans-serif; min-height: 100vh; }
-  input, select, button { font-family: 'Barlow', sans-serif; }
+  input, select, button, textarea { font-family: 'Barlow', sans-serif; }
   .header { background: #0b1929; border-bottom: 1px solid #162235; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
   .header-left { display: flex; align-items: center; gap: 12px; }
   .header-text .sub { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; letter-spacing: 0.3em; color: #c9a84c; text-transform: uppercase; }
   .header-text .title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; color: #f0ece2; letter-spacing: 0.03em; }
   .nav { display: flex; gap: 4px; flex-wrap: wrap; }
-  .nav button { background: transparent; color: #7a8fa8; border: 1px solid #162235; border-radius: 6px; padding: 7px 13px; font-family: 'Barlow Condensed', sans-serif; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.15s; }
+  .nav button { background: transparent; color: #7a8fa8; border: 1px solid #162235; border-radius: 6px; padding: 7px 13px; font-family: 'Barlow Condensed', sans-serif; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; }
   .nav button.active { background: #c9a84c; color: #07111f; border-color: #c9a84c; font-weight: 700; }
   .sync-bar { background: #060e1a; border-bottom: 1px solid #0f1e2e; padding: 6px 20px; display: flex; align-items: center; justify-content: space-between; }
-  .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: #3ecf8e; display: inline-block; margin-right: 7px; }
+  .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: #3ecf8e; display: inline-block; margin-right: 7px; transition: background 0.3s; }
   .sync-dot.syncing { background: #c9a84c; }
   .sync-text { font-size: 11px; color: #4e6a85; }
-  .sync-key-label { font-size: 11px; color: #2e4060; margin-left: 8px; }
-  .sync-actions { display: flex; gap: 8px; }
   .sync-actions button { background: transparent; border: 1px solid #162235; color: #4e6a85; border-radius: 5px; padding: 3px 10px; font-size: 11px; cursor: pointer; }
   .body { max-width: 740px; margin: 0 auto; padding: 24px 16px 60px; }
   .card { background: #0d1e30; border: 1px solid #162235; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
   .section-title { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #c9a84c; margin-bottom: 16px; }
-  label.field-label { display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #4e6a85; margin-bottom: 6px; }
+  .field-label { display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #4e6a85; margin-bottom: 6px; }
   input[type=text], input[type=number], input[type=date], select {
     width: 100%; background: #071118; border: 1px solid #162235; border-radius: 7px;
     padding: 10px 12px; color: #ddd9cf; font-size: 14px; outline: none;
@@ -41,11 +39,10 @@
   .emp-row .emp-name { flex: 2; }
   .emp-row .emp-hrs { flex: 1; }
   .preview-card { border-color: #1e3a26; }
-  .preview-title { color: #68d391; }
   .stat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
   .stat-box { background: #071118; border: 1px solid #162235; border-radius: 8px; padding: 12px; text-align: center; }
-  .stat-box .stat-label { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #4e6a85; margin-bottom: 4px; }
-  .stat-box .stat-val { font-family: 'Cinzel', serif; font-size: 17px; font-weight: 600; color: #f0ece2; }
+  .stat-label { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #4e6a85; margin-bottom: 4px; }
+  .stat-val { font-family: 'Cinzel', serif; font-size: 17px; font-weight: 600; color: #f0ece2; }
   table { width: 100%; border-collapse: collapse; }
   th { text-align: left; font-family: 'Barlow Condensed', sans-serif; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #4e6a85; padding-bottom: 8px; font-weight: 400; }
   td { padding: 9px 0; font-size: 13px; border-bottom: 1px solid #0f1e2e; }
@@ -55,16 +52,14 @@
   .divider { border-color: #162235; margin: 14px 0; }
   .weekly-layout { display: flex; gap: 14px; }
   .week-sidebar { width: 180px; flex-shrink: 0; }
-  .week-item { padding: 11px 13px; border-radius: 8px; margin-bottom: 6px; cursor: pointer; background: #0d1e30; border: 1px solid #162235; transition: all 0.15s; }
+  .week-item { padding: 11px 13px; border-radius: 8px; margin-bottom: 6px; cursor: pointer; background: #0d1e30; border: 1px solid #162235; }
   .week-item.active { background: #152a42; border-color: #c9a84c; }
   .week-item .wk-label { font-size: 11px; color: #7a8fa8; margin-bottom: 3px; }
   .week-item.active .wk-label { color: #c9a84c; }
   .week-item .wk-sub { font-size: 10px; color: #4e6a85; }
   .week-detail { flex: 1; min-width: 0; }
-  /* Lock screen */
   .lock-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
   .lock-card { max-width: 400px; width: 100%; background: #0d1e30; border: 1px solid #162235; border-radius: 14px; padding: 32px; text-align: center; }
-  .lock-card input { text-align: center; letter-spacing: 0.08em; font-size: 16px; margin-bottom: 12px; }
   .lock-error { color: #e05555; font-size: 13px; margin-bottom: 10px; }
   .lock-hint { font-size: 11px; color: #2e4060; margin-top: 18px; }
   @media (max-width: 500px) {
@@ -73,42 +68,258 @@
     .weekly-layout { flex-direction: column; }
     .week-sidebar { width: 100%; }
   }
+  #view-log, #view-history, #view-weekly, #view-summary, #view-employees { display: none; }
 </style>
 </head>
 <body>
 
-<div id="app"></div>
+<!-- LOCK SCREEN -->
+<div id="lock-screen" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;">
+  <div style="max-width:400px;width:100%;text-align:center;">
+    <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:10px;">
+      <svg width="44" height="44" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="sg0" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#F0E0B8"/><stop offset="50%" stop-color="#C9A84C"/><stop offset="100%" stop-color="#8B6914"/></radialGradient></defs><polygon points="50,2 54,44 50,48 46,44" fill="url(#sg0)"/><polygon points="98,50 56,54 52,50 56,46" fill="url(#sg0)"/><polygon points="50,98 46,56 50,52 54,56" fill="url(#sg0)"/><polygon points="2,50 44,46 48,50 44,54" fill="url(#sg0)"/><polygon points="79,21 55,47 50,48 51,43" fill="url(#sg0)"/><polygon points="79,79 53,53 52,48 57,49" fill="url(#sg0)"/><polygon points="21,79 47,53 52,52 51,57" fill="url(#sg0)"/><polygon points="21,21 47,47 48,52 43,51" fill="url(#sg0)"/><circle cx="50" cy="50" r="5" fill="#0A1628"/></svg>
+      <div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:0.3em;color:#c9a84c;text-transform:uppercase;">Sirius Window Cleaning</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:26px;color:#f0ece2;">Payroll Tracker</div>
+      </div>
+    </div>
+    <div style="width:40px;height:2px;background:#c9a84c;margin:0 auto 28px;"></div>
+    <div class="lock-card">
+      <p style="font-size:14px;color:#7a8fa8;margin-bottom:20px;">Tap Connect to load your payroll data across all devices.</p>
+      <div id="lock-error" class="lock-error" style="display:none;"></div>
+      <button class="btn-primary" id="connect-btn" style="width:100%;padding:13px;font-size:14px;" onclick="handleConnect()">Connect</button>
+      <p class="lock-hint">Your data syncs automatically across iPhone and iPad.</p>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP (hidden until connected) -->
+<div id="main-app" style="display:none;">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <svg width="38" height="38" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="sg1" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#F0E0B8"/><stop offset="50%" stop-color="#C9A84C"/><stop offset="100%" stop-color="#8B6914"/></radialGradient></defs><polygon points="50,2 54,44 50,48 46,44" fill="url(#sg1)"/><polygon points="98,50 56,54 52,50 56,46" fill="url(#sg1)"/><polygon points="50,98 46,56 50,52 54,56" fill="url(#sg1)"/><polygon points="2,50 44,46 48,50 44,54" fill="url(#sg1)"/><polygon points="79,21 55,47 50,48 51,43" fill="url(#sg1)"/><polygon points="79,79 53,53 52,48 57,49" fill="url(#sg1)"/><polygon points="21,79 47,53 52,52 51,57" fill="url(#sg1)"/><polygon points="21,21 47,47 48,52 43,51" fill="url(#sg1)"/><circle cx="50" cy="50" r="5" fill="#0A1628"/></svg>
+      <div class="header-text">
+        <div class="sub">Sirius Window Cleaning</div>
+        <div class="title">Payroll Tracker</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <button id="nav-log" class="active" onclick="showView('log')">Log Job</button>
+      <button id="nav-history" onclick="showView('history')">History</button>
+      <button id="nav-weekly" onclick="showView('weekly')">Weekly</button>
+      <button id="nav-summary" onclick="showView('summary')">Summary</button>
+      <button id="nav-employees" onclick="showView('employees')">Roster</button>
+    </nav>
+  </div>
+
+  <!-- Sync bar -->
+  <div class="sync-bar">
+    <div style="display:flex;align-items:center;">
+      <span class="sync-dot" id="sync-dot"></span>
+      <span class="sync-text" id="sync-text">Connected</span>
+    </div>
+    <div class="sync-actions">
+      <button onclick="refreshData()">↻ Refresh</button>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <!-- LOG JOB -->
+    <div id="view-log">
+      <div id="saved-banner" class="success-banner" style="display:none;">✓ Job saved and synced</div>
+      <div class="card">
+        <div class="section-title">Job Details</div>
+        <div class="grid-2">
+          <div><label class="field-label">Customer Name</label><input type="text" id="f-customer" placeholder="e.g. Smith Residence" oninput="updatePreview()"/></div>
+          <div><label class="field-label">Date</label><input type="date" id="f-date" onchange="updatePreview()"/></div>
+        </div>
+        <div class="grid-3">
+          <div><label class="field-label">Service Type</label>
+            <select id="f-service">
+              <option>Window Cleaning</option><option>Gutter Cleaning</option><option>Solar Panel Cleaning</option><option>Screen Cleaning</option><option>Other</option>
+            </select>
+          </div>
+          <div><label class="field-label">Total Job Pay ($)</label><input type="number" id="f-pay" placeholder="e.g. 2069" oninput="updatePreview()"/></div>
+          <div><label class="field-label">Company Cut (%)</label><input type="number" id="f-company" value="35" oninput="updatePreview()"/></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-title">Employees on This Job</div>
+        <div id="emp-entries"></div>
+        <button class="btn-ghost" onclick="addEntryRow()">+ Add Employee</button>
+      </div>
+      <div class="card preview-card" id="preview-card" style="display:none;">
+        <div class="section-title" style="color:#68d391;">Payout Preview</div>
+        <div class="stat-grid" id="preview-stats"></div>
+        <table><thead><tr><th>Employee</th><th>Hours</th><th>Share</th><th>Commission</th></tr></thead>
+        <tbody id="preview-rows"></tbody></table>
+      </div>
+      <button class="btn-primary" id="save-btn" onclick="submitJob()">Save Job &amp; Commissions</button>
+    </div>
+
+    <!-- HISTORY -->
+    <div id="view-history">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div class="section-title" style="margin:0;" id="history-title">Job History</div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <label class="field-label" style="margin:0;">Filter:</label>
+          <select id="history-filter" style="width:auto;padding:6px 10px;font-size:12px;" onchange="renderHistory()">
+            <option>All</option>
+          </select>
+        </div>
+      </div>
+      <div id="history-list"></div>
+    </div>
+
+    <!-- WEEKLY -->
+    <div id="view-weekly">
+      <div class="section-title">Weekly Pay Breakdown</div>
+      <div id="weekly-content"></div>
+    </div>
+
+    <!-- SUMMARY -->
+    <div id="view-summary">
+      <div class="section-title">Earnings Summary</div>
+      <div class="stat-grid" id="summary-stats"></div>
+      <div class="card">
+        <div class="section-title">Per-Employee Totals (All Time)</div>
+        <div id="summary-table"></div>
+      </div>
+    </div>
+
+    <!-- ROSTER -->
+    <div id="view-employees">
+      <div class="section-title">Employee Roster</div>
+      <div class="card">
+        <p style="font-size:12px;color:#4e6a85;margin-bottom:16px;">Add employees here so they appear in the job log dropdown.</p>
+        <div style="display:flex;gap:10px;margin-bottom:16px;">
+          <input type="text" id="new-emp-input" placeholder="Employee name" style="flex:1;" onkeydown="if(event.key==='Enter')addEmployee()"/>
+          <button class="btn-primary" onclick="addEmployee()">Add</button>
+        </div>
+        <hr class="divider"/>
+        <div id="roster-list"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <script>
 const SUPABASE_URL = 'https://zbyzbiyozxvwamqrnjpb.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpieXpiaXlvenh2d2FtcXJuanBiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4ODU5NjAsImV4cCI6MjA5NjQ2MTk2MH0.LWF6w2VJWBWOYDCXGgf1hf9cKCjSgMsxnfWgHXDAYNs';
 const TABLE = 'payroll';
-const COMPANY_PCT_DEFAULT = 35;
-const SERVICE_TYPES = ['Window Cleaning','Gutter Cleaning','Solar Panel Cleaning','Screen Cleaning','Other'];
 
-// ── Supabase helpers ──────────────────────────────────────────────
-async function sbFetch(path, opts = {}) {
-  const res = await fetch(SUPABASE_URL + '/rest/v1/' + path, {
+let dbId = null;
+let jobs = [];
+let roster = ['Billy','Joey','Guerry'];
+let entryCount = 1;
+let selectedWeek = null;
+let saveTimeout = null;
+
+// ── Supabase ──────────────────────────────────────────────────────
+async function sbFetch(path, opts={}) {
+  const res = await fetch(SUPABASE_URL+'/rest/v1/'+path, {
     ...opts,
-    headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', Prefer: 'return=representation', ...(opts.headers||{}) }
+    headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer '+SUPABASE_KEY, 'Content-Type': 'application/json', Prefer: 'return=representation', ...(opts.headers||{}) }
   });
   if (!res.ok) throw new Error(await res.text());
   const text = await res.text();
   return text ? JSON.parse(text) : null;
 }
 async function loadData() {
-  const rows = await sbFetch(TABLE + '?order=id.asc&limit=1');
-  if (rows && rows.length > 0) return { id: rows[0].id, ...rows[0].data };
-  return null;
+  const rows = await sbFetch(TABLE+'?order=id.asc&limit=1');
+  return rows && rows.length > 0 ? { id: rows[0].id, ...rows[0].data } : null;
 }
-async function saveData(id, jobs, roster) {
-  await sbFetch(TABLE + '?id=eq.' + id, {
-    method: 'PATCH',
-    body: JSON.stringify({ data: { jobs, roster } })
-  });
+async function saveData() {
+  if (!dbId) return;
+  setSyncing(true);
+  try {
+    await sbFetch(TABLE+'?id=eq.'+dbId, { method:'PATCH', body: JSON.stringify({ data: { jobs, roster } }) });
+    setSynced();
+  } catch(e) { setSyncError(); }
+}
+function scheduleSave() {
+  clearTimeout(saveTimeout);
+  saveTimeout = setTimeout(saveData, 1000);
 }
 
-// ── Formatting helpers ────────────────────────────────────────────
+// ── Sync UI ───────────────────────────────────────────────────────
+function setSyncing(b) {
+  const dot = document.getElementById('sync-dot');
+  const txt = document.getElementById('sync-text');
+  if (dot) dot.className = 'sync-dot' + (b?' syncing':'');
+  if (txt) txt.textContent = b ? 'Saving…' : txt.textContent;
+}
+function setSynced() {
+  setSyncing(false);
+  const txt = document.getElementById('sync-text');
+  const t = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  if (txt) txt.textContent = 'Synced '+t;
+}
+function setSyncError() {
+  setSyncing(false);
+  const txt = document.getElementById('sync-text');
+  if (txt) txt.textContent = 'Sync failed';
+}
+
+// ── Connect ───────────────────────────────────────────────────────
+async function handleConnect() {
+  const btn = document.getElementById('connect-btn');
+  const err = document.getElementById('lock-error');
+  btn.textContent = 'Connecting…'; btn.disabled = true;
+  err.style.display = 'none';
+  try {
+    const d = await loadData();
+    if (d) {
+      dbId = d.id;
+      jobs = d.jobs || [];
+      roster = d.roster || ['Billy','Joey','Guerry'];
+      document.getElementById('lock-screen').style.display = 'none';
+      document.getElementById('main-app').style.display = 'block';
+      showView('log');
+      setSynced();
+    } else {
+      err.textContent = 'Could not connect. Check your internet.';
+      err.style.display = 'block';
+      btn.textContent = 'Connect'; btn.disabled = false;
+    }
+  } catch(e) {
+    err.textContent = 'Connection failed. Try again.';
+    err.style.display = 'block';
+    btn.textContent = 'Connect'; btn.disabled = false;
+  }
+}
+async function refreshData() {
+  setSyncing(true);
+  try {
+    const d = await loadData();
+    if (d) { jobs = d.jobs||[]; roster = d.roster||['Billy','Joey','Guerry']; }
+    setSynced();
+    renderCurrentView();
+  } catch(e) { setSyncError(); }
+}
+
+// ── Navigation ────────────────────────────────────────────────────
+let currentView = 'log';
+function showView(v) {
+  ['log','history','weekly','summary','employees'].forEach(n => {
+    document.getElementById('view-'+n).style.display = n===v ? 'block' : 'none';
+    const btn = document.getElementById('nav-'+n);
+    if (btn) btn.className = n===v ? 'active' : '';
+  });
+  currentView = v;
+  if (v==='log') initLogView();
+  else if (v==='history') renderHistory();
+  else if (v==='weekly') renderWeekly();
+  else if (v==='summary') renderSummary();
+  else if (v==='employees') renderRoster();
+}
+function renderCurrentView() { showView(currentView); }
+
+// ── Helpers ───────────────────────────────────────────────────────
 const fmt$ = n => new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(n||0);
 const fmtPct = n => (n*100).toFixed(1)+'%';
 const fmtDate = d => new Date(d+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
@@ -122,387 +333,294 @@ const fmtWeekLabel = ws => {
   return s.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' – '+e.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
 };
 
-// ── Star SVG ──────────────────────────────────────────────────────
-function starSVG(size=38) {
-  return `<svg width="${size}" height="${size}" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <radialGradient id="sg" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#F0E0B8"/>
-        <stop offset="50%" stop-color="#C9A84C"/>
-        <stop offset="100%" stop-color="#8B6914"/>
-      </radialGradient>
-    </defs>
-    <polygon points="50,2 54,44 50,48 46,44" fill="url(#sg)"/>
-    <polygon points="98,50 56,54 52,50 56,46" fill="url(#sg)"/>
-    <polygon points="50,98 46,56 50,52 54,56" fill="url(#sg)"/>
-    <polygon points="2,50 44,46 48,50 44,54" fill="url(#sg)"/>
-    <polygon points="79,21 55,47 50,48 51,43" fill="url(#sg)"/>
-    <polygon points="79,79 53,53 52,48 57,49" fill="url(#sg)"/>
-    <polygon points="21,79 47,53 52,52 51,57" fill="url(#sg)"/>
-    <polygon points="21,21 47,47 48,52 43,51" fill="url(#sg)"/>
-    <circle cx="50" cy="50" r="5" fill="#0A1628"/>
-  </svg>`;
+function getFormValues() {
+  const entries = [];
+  for (let i = 0; i < entryCount; i++) {
+    const nameEl = document.getElementById('entry-name-'+i);
+    const hrsEl  = document.getElementById('entry-hrs-'+i);
+    if (nameEl) entries.push({ name: nameEl.value, hours: hrsEl ? hrsEl.value : '' });
+  }
+  return {
+    customer: (document.getElementById('f-customer')||{}).value || '',
+    date:     (document.getElementById('f-date')||{}).value || '',
+    service:  (document.getElementById('f-service')||{}).value || 'Window Cleaning',
+    totalPay: (document.getElementById('f-pay')||{}).value || '',
+    companyPct: parseFloat((document.getElementById('f-company')||{}).value) || 35,
+    entries
+  };
 }
 
-// ── App state ─────────────────────────────────────────────────────
-let state = {
-  view: 'lock', // lock | log | history | weekly | summary | employees
-  dbId: null,
-  jobs: [],
-  roster: ['Billy','Joey','Guerry'],
-  syncing: false,
-  lastSynced: null,
-  syncError: null,
-  saved: false,
-  filterEmp: 'All',
-  selectedWeek: null,
-  form: {
-    customer:'', date: new Date().toISOString().split('T')[0],
-    service:'Window Cleaning', totalPay:'', companyPct: COMPANY_PCT_DEFAULT,
-    entries:[{name:'Billy',hours:''}]
-  },
-  newEmpName: '',
-  lockInput: '',
-  lockError: '',
-  lockLoading: false,
-};
-
-function setState(patch) { Object.assign(state, patch); render(); }
-
-// ── Calculations ──────────────────────────────────────────────────
-function calcJob(f) {
+function calcPayouts(f) {
   const pay = parseFloat(f.totalPay)||0;
-  const pool = pay*((100-f.companyPct)/100);
-  const totalHrs = f.entries.reduce((s,e)=>s+(parseFloat(e.hours)||0),0);
-  return f.entries.map(e=>{
-    const hrs=parseFloat(e.hours)||0, pct=totalHrs>0?hrs/totalHrs:0;
-    return {name:e.name,hours:hrs,pct,payout:pool*pct};
+  const pool = pay * ((100 - f.companyPct) / 100);
+  const totalHrs = f.entries.reduce((s,e)=>s+(parseFloat(e.hours)||0), 0);
+  return f.entries.map(e => {
+    const hrs = parseFloat(e.hours)||0, pct = totalHrs>0 ? hrs/totalHrs : 0;
+    return { name: e.name, hours: hrs, pct, payout: pool*pct };
   });
 }
-function empTotals() {
-  const map={};
-  state.jobs.forEach(j=>j.payouts.forEach(p=>{
-    if(!map[p.name]) map[p.name]={jobs:0,hours:0,total:0};
-    map[p.name].jobs++; map[p.name].hours+=p.hours; map[p.name].total+=p.payout;
-  }));
-  return Object.entries(map).map(([name,d])=>({name,...d})).sort((a,b)=>b.total-a.total);
+
+// ── Log Job View ──────────────────────────────────────────────────
+function initLogView() {
+  // Set today's date if empty
+  const dateEl = document.getElementById('f-date');
+  if (dateEl && !dateEl.value) dateEl.value = new Date().toISOString().split('T')[0];
+  renderEntryRows();
+  updatePreview();
 }
+
+function renderEntryRows() {
+  const container = document.getElementById('emp-entries');
+  if (!container) return;
+  let html = '';
+  for (let i = 0; i < entryCount; i++) {
+    const savedName = window._entryNames ? window._entryNames[i] || roster[0] : roster[0];
+    const savedHrs  = window._entryHours ? window._entryHours[i] || '' : '';
+    html += `<div class="emp-row">
+      <div class="emp-name">
+        ${i===0?'<label class="field-label">Employee</label>':''}
+        <select id="entry-name-${i}" onchange="updatePreview()">
+          ${roster.map(n=>`<option${n===savedName?' selected':''}>${n}</option>`).join('')}
+        </select>
+      </div>
+      <div class="emp-hrs">
+        ${i===0?'<label class="field-label">Hours</label>':''}
+        <input type="number" id="entry-hrs-${i}" placeholder="hrs" value="${savedHrs}" oninput="updatePreview()"/>
+      </div>
+      <button class="btn-danger" style="${i===0?'margin-top:18px;':''} opacity:${entryCount>1?1:0.3}" onclick="removeEntryRow(${i})" ${entryCount<=1?'disabled':''}>×</button>
+    </div>`;
+  }
+  container.innerHTML = html;
+}
+
+function saveEntryValues() {
+  window._entryNames = [];
+  window._entryHours = [];
+  for (let i = 0; i < entryCount; i++) {
+    const n = document.getElementById('entry-name-'+i);
+    const h = document.getElementById('entry-hrs-'+i);
+    window._entryNames[i] = n ? n.value : roster[0];
+    window._entryHours[i] = h ? h.value : '';
+  }
+}
+
+function addEntryRow() {
+  saveEntryValues();
+  entryCount++;
+  if (!window._entryNames) window._entryNames = [];
+  if (!window._entryHours) window._entryHours = [];
+  window._entryNames[entryCount-1] = roster[0];
+  window._entryHours[entryCount-1] = '';
+  renderEntryRows();
+  updatePreview();
+}
+
+function removeEntryRow(i) {
+  if (entryCount <= 1) return;
+  saveEntryValues();
+  window._entryNames.splice(i, 1);
+  window._entryHours.splice(i, 1);
+  entryCount--;
+  renderEntryRows();
+  updatePreview();
+}
+
+function updatePreview() {
+  const f = getFormValues();
+  const card = document.getElementById('preview-card');
+  if (!card) return;
+  if (!f.totalPay || parseFloat(f.totalPay) <= 0) { card.style.display='none'; return; }
+  const pay = parseFloat(f.totalPay);
+  const pool = pay * ((100-f.companyPct)/100);
+  const payouts = calcPayouts(f);
+  card.style.display = 'block';
+  document.getElementById('preview-stats').innerHTML = `
+    <div class="stat-box"><div class="stat-label">Total Job</div><div class="stat-val">${fmt$(pay)}</div></div>
+    <div class="stat-box"><div class="stat-label">Company (${f.companyPct}%)</div><div class="stat-val" style="color:#c9a84c">${fmt$(pay*f.companyPct/100)}</div></div>
+    <div class="stat-box"><div class="stat-label">Employee Pool</div><div class="stat-val" style="color:#68d391">${fmt$(pool)}</div></div>`;
+  document.getElementById('preview-rows').innerHTML = payouts.map(p=>
+    `<tr><td>${p.name}</td><td style="color:#7a8fa8">${p.hours}hrs</td><td style="color:#c9a84c">${fmtPct(p.pct)}</td><td style="color:#68d391;font-weight:600">${fmt$(p.payout)}</td></tr>`
+  ).join('');
+}
+
+function submitJob() {
+  const f = getFormValues();
+  if (!f.customer || !f.totalPay) return;
+  const payouts = calcPayouts(f);
+  const job = {
+    id: Date.now(), customer: f.customer, date: f.date, service: f.service,
+    totalPay: parseFloat(f.totalPay), companyPct: f.companyPct,
+    companyTake: parseFloat(f.totalPay)*(f.companyPct/100), payouts
+  };
+  jobs.unshift(job);
+  saveData();
+  // Reset form
+  document.getElementById('f-customer').value = '';
+  document.getElementById('f-pay').value = '';
+  document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
+  entryCount = 1;
+  window._entryNames = [roster[0]];
+  window._entryHours = [''];
+  renderEntryRows();
+  updatePreview();
+  const banner = document.getElementById('saved-banner');
+  banner.style.display = 'block';
+  setTimeout(()=>banner.style.display='none', 2500);
+  showView('history');
+}
+
+// ── History ───────────────────────────────────────────────────────
+function renderHistory() {
+  const filter = (document.getElementById('history-filter')||{}).value || 'All';
+  // Update filter options
+  const sel = document.getElementById('history-filter');
+  if (sel) {
+    const cur = sel.value;
+    sel.innerHTML = '<option>All</option>' + roster.map(n=>`<option${n===cur?' selected':''}>${n}</option>`).join('');
+  }
+  const filtered = filter==='All' ? jobs : jobs.filter(j=>j.payouts.some(p=>p.name===filter));
+  const title = document.getElementById('history-title');
+  if (title) title.textContent = `Job History (${filtered.length})`;
+  const list = document.getElementById('history-list');
+  if (!list) return;
+  if (filtered.length===0) { list.innerHTML='<div class="empty-state">No jobs logged yet.</div>'; return; }
+  list.innerHTML = filtered.map(j=>`
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+        <div>
+          <div style="font-size:16px;color:#f0ece2;margin-bottom:4px;">${j.customer}</div>
+          <div style="display:flex;gap:8px;align-items:center;"><span style="font-size:12px;color:#4e6a85;">${fmtDate(j.date)}</span><span class="tag">${j.service}</span></div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-family:'Cinzel',serif;font-size:18px;color:#f0ece2;">${fmt$(j.totalPay)}</div>
+          <div style="font-size:11px;color:#4e6a85;">Co. kept ${fmt$(j.companyTake)}</div>
+        </div>
+      </div>
+      <hr class="divider"/>
+      <table><thead><tr><th>Employee</th><th>Hours</th><th>Share</th><th>Commission</th></tr></thead><tbody>
+        ${j.payouts.map(p=>`<tr><td>${p.name}</td><td style="color:#7a8fa8">${p.hours}hrs</td><td style="color:#c9a84c">${fmtPct(p.pct)}</td><td style="color:#68d391;font-weight:600">${fmt$(p.payout)}</td></tr>`).join('')}
+      </tbody></table>
+      <div style="text-align:right;margin-top:10px;"><button class="btn-danger" onclick="deleteJob(${j.id})">Delete</button></div>
+    </div>`).join('');
+}
+
+function deleteJob(id) {
+  if (!confirm('Delete this job?')) return;
+  jobs = jobs.filter(j=>j.id!==id);
+  saveData();
+  renderHistory();
+}
+
+// ── Weekly ────────────────────────────────────────────────────────
 function weeklyData() {
-  const weeks={};
-  state.jobs.forEach(j=>{
-    const ws=getWeekStart(j.date);
-    if(!weeks[ws]) weeks[ws]={jobs:[],employees:{}};
+  const weeks = {};
+  jobs.forEach(j=>{
+    const ws = getWeekStart(j.date);
+    if (!weeks[ws]) weeks[ws]={jobs:[],employees:{}};
     weeks[ws].jobs.push(j);
     j.payouts.forEach(p=>{
-      if(!weeks[ws].employees[p.name]) weeks[ws].employees[p.name]={hours:0,payout:0,jobs:0};
+      if (!weeks[ws].employees[p.name]) weeks[ws].employees[p.name]={hours:0,payout:0,jobs:0};
       weeks[ws].employees[p.name].hours+=p.hours;
       weeks[ws].employees[p.name].payout+=p.payout;
       weeks[ws].employees[p.name].jobs++;
     });
   });
   return Object.entries(weeks).sort((a,b)=>b[0].localeCompare(a[0])).map(([ws,d])=>({
-    weekStart:ws, label:fmtWeekLabel(ws),
-    jobCount:d.jobs.length,
+    weekStart:ws, label:fmtWeekLabel(ws), jobCount:d.jobs.length,
     totalRevenue:d.jobs.reduce((s,j)=>s+j.totalPay,0),
     totalPaid:d.jobs.reduce((s,j)=>s+j.payouts.reduce((a,p)=>a+p.payout,0),0),
     employees:Object.entries(d.employees).map(([name,e])=>({name,...e})).sort((a,b)=>b.payout-a.payout)
   }));
 }
 
-// ── Persist ───────────────────────────────────────────────────────
-async function persist() {
-  if (!state.dbId) return;
-  setState({syncing:true});
-  try {
-    await saveData(state.dbId, state.jobs, state.roster);
-    setState({syncing:false, lastSynced:new Date(), syncError:null});
-  } catch(e) {
-    setState({syncing:false, syncError:'Sync failed'});
-  }
-}
-async function refresh() {
-  setState({syncing:true});
-  try {
-    const d = await loadData();
-    if (d) setState({jobs:d.jobs||[], roster:d.roster||['Billy','Joey','Guerry'], dbId:d.id, syncing:false, lastSynced:new Date()});
-  } catch(e) { setState({syncing:false, syncError:'Refresh failed'}); }
-}
-
-// ── Handlers ──────────────────────────────────────────────────────
-async function handleConnect() {
-  setState({lockLoading:true, lockError:''});
-  try {
-    const d = await loadData();
-    if (d) {
-      setState({dbId:d.id, jobs:d.jobs||[], roster:d.roster||['Billy','Joey','Guerry'], view:'log', lockLoading:false, lastSynced:new Date()});
-    } else {
-      setState({lockError:'Could not connect. Check your internet and try again.', lockLoading:false});
-    }
-  } catch(e) {
-    setState({lockError:'Connection failed. Try again.', lockLoading:false});
-  }
-}
-function submitJob() {
-  const f = state.form;
-  if (!f.customer||!f.totalPay) return;
-  const payouts = calcJob(f);
-  const job = {
-    id: Date.now(), customer:f.customer, date:f.date, service:f.service,
-    totalPay:parseFloat(f.totalPay), companyPct:f.companyPct,
-    companyTake:parseFloat(f.totalPay)*(f.companyPct/100), payouts
-  };
-  const jobs = [job, ...state.jobs];
-  setState({jobs, saved:true, view:'history', form:{...f,customer:'',totalPay:'',date:new Date().toISOString().split('T')[0],entries:f.entries.map(e=>({...e,hours:''}))}});
-  persist();
-  setTimeout(()=>setState({saved:false}),2500);
-}
-function deleteJob(id) {
-  setState({jobs:state.jobs.filter(j=>j.id!==id)});
-  persist();
-}
-function addEmployee() {
-  const name = state.newEmpName.trim();
-  if (!name||state.roster.includes(name)) return;
-  const roster = [...state.roster, name];
-  setState({roster, newEmpName:''});
-  persist();
-}
-function removeEmployee(name) {
-  const roster = state.roster.filter(n=>n!==name);
-  setState({roster});
-  persist();
-}
-function updateFormEntry(i,field,val) {
-  const entries = [...state.form.entries];
-  entries[i]={...entries[i],[field]:val};
-  setState({form:{...state.form,entries}});
-}
-function addEntryRow() {
-  setState({form:{...state.form,entries:[...state.form.entries,{name:state.roster[0]||'',hours:''}]}});
-}
-function removeEntryRow(i) {
-  if(state.form.entries.length<=1) return;
-  setState({form:{...state.form,entries:state.form.entries.filter((_,idx)=>idx!==i)}});
-}
-
-// ── Render ────────────────────────────────────────────────────────
-function render() {
-  document.getElementById('app').innerHTML = buildHTML();
-  bindEvents();
-}
-
-function buildHTML() {
-  if (state.view==='lock') return buildLock();
+function renderWeekly() {
   const weeks = weeklyData();
-  const activeWeek = state.selectedWeek||(weeks.length>0?weeks[0].weekStart:null);
-  const activeWeekData = weeks.find(w=>w.weekStart===activeWeek);
-  const syncTime = state.lastSynced ? state.lastSynced.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) : 'Connected';
-
-  return `
-  <div class="header">
-    <div class="header-left">
-      ${starSVG(38)}
-      <div class="header-text">
-        <div class="sub">Sirius Window Cleaning</div>
-        <div class="title">Payroll Tracker</div>
-      </div>
-    </div>
-    <nav class="nav">
-      ${[['log','Log Job'],['history','History'],['weekly','Weekly'],['summary','Summary'],['employees','Roster']].map(([k,l])=>`<button class="${state.view===k?'active':''}" onclick="setState({view:'${k}'})">${l}</button>`).join('')}
-    </nav>
-  </div>
-  <div class="sync-bar">
-    <div style="display:flex;align-items:center">
-      <span class="sync-dot${state.syncing?' syncing':''}"></span>
-      <span class="sync-text">${state.syncing?'Saving…':syncTime}</span>
-      ${state.syncError?`<span style="color:#e05555;font-size:11px;margin-left:8px">${state.syncError}</span>`:''}
-    </div>
-    <div class="sync-actions">
-      <button onclick="refresh()">↻ Refresh</button>
-    </div>
-  </div>
-  <div class="body">
-    ${state.view==='log'?buildLog():state.view==='history'?buildHistory(weeks):state.view==='weekly'?buildWeekly(weeks,activeWeek,activeWeekData):state.view==='summary'?buildSummary():buildRoster()}
-  </div>`;
-}
-
-function buildLock() {
-  return `<div class="lock-wrap">
-    <div style="max-width:400px;width:100%;text-align:center">
-      <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:10px">
-        ${starSVG(44)}
-        <div>
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:0.3em;color:#c9a84c;text-transform:uppercase">Sirius Window Cleaning</div>
-          <div style="font-family:'Cormorant Garamond',serif;font-size:26px;color:#f0ece2">Payroll Tracker</div>
-        </div>
-      </div>
-      <div style="width:40px;height:2px;background:#c9a84c;margin:0 auto 28px"></div>
-      <div class="lock-card">
-        <p style="font-size:14px;color:#7a8fa8;margin-bottom:20px">Tap Connect to load your payroll data across all devices.</p>
-        ${state.lockError?`<div class="lock-error">${state.lockError}</div>`:''}
-        <button class="btn-primary" style="width:100%;padding:13px;font-size:14px" onclick="handleConnect()" ${state.lockLoading?'disabled':''}>
-          ${state.lockLoading?'Connecting…':'Connect'}
-        </button>
-        <p class="lock-hint">Your data syncs automatically across iPhone and iPad.</p>
-      </div>
-    </div>
-  </div>`;
-}
-
-function buildLog() {
-  const f = state.form;
-  const preview = f.totalPay ? calcJob(f) : null;
-  return `
-    ${state.saved?'<div class="success-banner">✓ Job saved and synced</div>':''}
-    <div class="card">
-      <div class="section-title">Job Details</div>
-      <div class="grid-2">
-        <div><label class="field-label">Customer Name</label><input type="text" value="${f.customer}" oninput="setState({form:{...state.form,customer:this.value}})" placeholder="e.g. Smith Residence"/></div>
-        <div><label class="field-label">Date</label><input type="date" value="${f.date}" onchange="setState({form:{...state.form,date:this.value}})"/></div>
-      </div>
-      <div class="grid-3">
-        <div><label class="field-label">Service Type</label><select onchange="setState({form:{...state.form,service:this.value}})">${SERVICE_TYPES.map(s=>`<option${f.service===s?' selected':''}>${s}</option>`).join('')}</select></div>
-        <div><label class="field-label">Total Job Pay ($)</label><input type="number" value="${f.totalPay}" oninput="setState({form:{...state.form,totalPay:this.value}})" placeholder="e.g. 2069"/></div>
-        <div><label class="field-label">Company Cut (%)</label><input type="number" value="${f.companyPct}" oninput="setState({form:{...state.form,companyPct:parseFloat(this.value)||0}})"/></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="section-title">Employees on This Job</div>
-      ${f.entries.map((e,i)=>`
-        <div class="emp-row">
-          <div class="emp-name">
-            ${i===0?'<label class="field-label">Employee</label>':''}
-            <select onchange="updateFormEntry(${i},'name',this.value)">${state.roster.map(n=>`<option${e.name===n?' selected':''}>${n}</option>`).join('')}</select>
-          </div>
-          <div class="emp-hrs">
-            ${i===0?'<label class="field-label">Hours</label>':''}
-            <input type="number" value="${e.hours}" placeholder="hrs" oninput="updateFormEntry(${i},'hours',this.value)"/>
-          </div>
-          <button class="btn-danger" style="margin-bottom:1px;opacity:${f.entries.length>1?1:0.3}" onclick="removeEntryRow(${i})">×</button>
-        </div>`).join('')}
-      <button class="btn-ghost" onclick="addEntryRow()">+ Add Employee</button>
-    </div>
-    ${preview&&f.totalPay?`
-    <div class="card preview-card">
-      <div class="section-title preview-title">Payout Preview</div>
-      <div class="stat-grid">
-        ${[{l:'Total Job',v:fmt$(parseFloat(f.totalPay)),c:'#f0ece2'},{l:`Company (${f.companyPct}%)`,v:fmt$(parseFloat(f.totalPay)*f.companyPct/100),c:'#c9a84c'},{l:'Employee Pool',v:fmt$(parseFloat(f.totalPay)*(100-f.companyPct)/100),c:'#68d391'}].map(s=>`<div class="stat-box"><div class="stat-label">${s.l}</div><div class="stat-val" style="color:${s.c}">${s.v}</div></div>`).join('')}
-      </div>
-      <table><thead><tr>${['Employee','Hours','Share','Commission'].map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>
-        ${preview.map(p=>`<tr><td>${p.name}</td><td style="color:#7a8fa8">${p.hours}hrs</td><td style="color:#c9a84c">${fmtPct(p.pct)}</td><td style="color:#68d391;font-weight:600">${fmt$(p.payout)}</td></tr>`).join('')}
-      </tbody></table>
-    </div>`:''}
-    <button class="btn-primary" onclick="submitJob()" ${!f.customer||!f.totalPay?'disabled':''}>Save Job & Commissions</button>`;
-}
-
-function buildHistory(weeks) {
-  const filtered = state.filterEmp==='All' ? state.jobs : state.jobs.filter(j=>j.payouts.some(p=>p.name===state.filterEmp));
-  return `
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-      <div class="section-title" style="margin:0">Job History (${filtered.length})</div>
-      <div style="display:flex;align-items:center;gap:8px">
-        <label class="field-label" style="margin:0">Filter:</label>
-        <select style="width:auto;padding:6px 10px;font-size:12px" onchange="setState({filterEmp:this.value})">
-          <option${state.filterEmp==='All'?' selected':''}>All</option>
-          ${state.roster.map(n=>`<option${state.filterEmp===n?' selected':''}>${n}</option>`).join('')}
-        </select>
-      </div>
-    </div>
-    ${filtered.length===0?'<div class="empty-state">No jobs logged yet.</div>':filtered.map(j=>`
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
-        <div>
-          <div style="font-size:16px;color:#f0ece2;margin-bottom:4px">${j.customer}</div>
-          <div style="display:flex;gap:8px;align-items:center"><span style="font-size:12px;color:#4e6a85">${fmtDate(j.date)}</span><span class="tag">${j.service}</span></div>
-        </div>
-        <div style="text-align:right">
-          <div style="font-family:'Cinzel',serif;font-size:18px;color:#f0ece2">${fmt$(j.totalPay)}</div>
-          <div style="font-size:11px;color:#4e6a85">Co. kept ${fmt$(j.companyTake)}</div>
-        </div>
-      </div>
-      <hr class="divider"/>
-      <table><thead><tr>${['Employee','Hours','Share','Commission'].map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>
-        ${j.payouts.map(p=>`<tr><td>${p.name}</td><td style="color:#7a8fa8">${p.hours}hrs</td><td style="color:#c9a84c">${fmtPct(p.pct)}</td><td style="color:#68d391;font-weight:600">${fmt$(p.payout)}</td></tr>`).join('')}
-      </tbody></table>
-      <div style="text-align:right;margin-top:10px"><button class="btn-danger" onclick="deleteJob(${j.id})">Delete</button></div>
-    </div>`).join('')}`;
-}
-
-function buildWeekly(weeks, activeWeek, activeWeekData) {
-  if (weeks.length===0) return '<div class="empty-state">No jobs logged yet.</div>';
-  return `
-    <div class="section-title">Weekly Pay Breakdown</div>
+  const content = document.getElementById('weekly-content');
+  if (!content) return;
+  if (weeks.length===0) { content.innerHTML='<div class="empty-state">No jobs logged yet.</div>'; return; }
+  const activeWeek = selectedWeek || weeks[0].weekStart;
+  const aw = weeks.find(w=>w.weekStart===activeWeek) || weeks[0];
+  const weekJobs = jobs.filter(j=>getWeekStart(j.date)===aw.weekStart);
+  content.innerHTML = `
     <div class="weekly-layout">
       <div class="week-sidebar">
-        ${weeks.map(w=>`<div class="week-item${w.weekStart===activeWeek?' active':''}" onclick="setState({selectedWeek:'${w.weekStart}'})">
+        ${weeks.map(w=>`<div class="week-item${w.weekStart===aw.weekStart?' active':''}" onclick="selectWeek('${w.weekStart}')">
           <div class="wk-label">${w.label}</div>
           <div class="wk-sub">${w.jobCount} job${w.jobCount!==1?'s':''} · ${fmt$(w.totalRevenue)}</div>
         </div>`).join('')}
       </div>
       <div class="week-detail">
-        ${activeWeekData?`
-        <div class="stat-grid" style="grid-template-columns:1fr 1fr;margin-bottom:12px">
-          <div class="stat-box"><div class="stat-label">Week Revenue</div><div class="stat-val">${fmt$(activeWeekData.totalRevenue)}</div></div>
-          <div class="stat-box"><div class="stat-label">Employee Pool</div><div class="stat-val" style="color:#68d391">${fmt$(activeWeekData.totalPaid)}</div></div>
+        <div class="stat-grid" style="grid-template-columns:1fr 1fr;margin-bottom:12px;">
+          <div class="stat-box"><div class="stat-label">Week Revenue</div><div class="stat-val">${fmt$(aw.totalRevenue)}</div></div>
+          <div class="stat-box"><div class="stat-label">Employee Pool</div><div class="stat-val" style="color:#68d391">${fmt$(aw.totalPaid)}</div></div>
         </div>
         <div class="card">
-          <div class="section-title">Employee Totals — ${activeWeekData.label}</div>
-          <table><thead><tr>${['Employee','Jobs','Hours','Earned'].map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>
-            ${activeWeekData.employees.map(e=>`<tr><td style="color:#f0ece2">${e.name}</td><td style="color:#7a8fa8">${e.jobs}</td><td style="color:#7a8fa8">${e.hours.toFixed(1)}hrs</td><td style="color:#68d391;font-weight:700;font-family:'Cinzel',serif">${fmt$(e.payout)}</td></tr>`).join('')}
+          <div class="section-title">Employee Totals — ${aw.label}</div>
+          <table><thead><tr><th>Employee</th><th>Jobs</th><th>Hours</th><th>Earned</th></tr></thead><tbody>
+            ${aw.employees.map(e=>`<tr><td style="color:#f0ece2">${e.name}</td><td style="color:#7a8fa8">${e.jobs}</td><td style="color:#7a8fa8">${e.hours.toFixed(1)}hrs</td><td style="color:#68d391;font-weight:700;font-family:'Cinzel',serif">${fmt$(e.payout)}</td></tr>`).join('')}
           </tbody></table>
         </div>
         <div class="card">
           <div class="section-title">Jobs This Week</div>
-          ${state.jobs.filter(j=>getWeekStart(j.date)===activeWeekData.weekStart).map(j=>`
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #0f1e2e">
-              <div><div style="font-size:14px;color:#ddd9cf">${j.customer}</div><div style="font-size:11px;color:#4e6a85;margin-top:2px">${fmtDate(j.date)} · ${j.service}</div></div>
-              <div style="font-size:14px;color:#f0ece2;font-weight:600">${fmt$(j.totalPay)}</div>
-            </div>`).join('')}
-        </div>`:''}
+          ${weekJobs.map(j=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #0f1e2e;">
+            <div><div style="font-size:14px;color:#ddd9cf;">${j.customer}</div><div style="font-size:11px;color:#4e6a85;margin-top:2px;">${fmtDate(j.date)} · ${j.service}</div></div>
+            <div style="font-size:14px;color:#f0ece2;font-weight:600;">${fmt$(j.totalPay)}</div>
+          </div>`).join('')}
+        </div>
       </div>
     </div>`;
 }
 
-function buildSummary() {
-  const totalRevenue = state.jobs.reduce((s,j)=>s+j.totalPay,0);
-  const totalCompany = state.jobs.reduce((s,j)=>s+j.companyTake,0);
-  const totalPaid = state.jobs.reduce((s,j)=>s+j.payouts.reduce((a,p)=>a+p.payout,0),0);
-  const totals = empTotals();
-  return `
-    <div class="section-title">Earnings Summary</div>
-    <div class="stat-grid">
-      ${[{l:'Total Revenue',v:fmt$(totalRevenue),c:'#f0ece2'},{l:'Company Kept',v:fmt$(totalCompany),c:'#c9a84c'},{l:'Total Paid Out',v:fmt$(totalPaid),c:'#68d391'}].map(s=>`<div class="stat-box"><div class="stat-label">${s.l}</div><div class="stat-val" style="color:${s.c}">${s.v}</div></div>`).join('')}
-    </div>
-    <div class="card">
-      <div class="section-title">Per-Employee Totals (All Time)</div>
-      ${totals.length===0?'<div class="empty-state" style="padding:20px">No data yet.</div>':`
-      <table><thead><tr>${['Employee','Jobs','Total Hours','Total Earned'].map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>
-        ${totals.map(e=>`<tr><td style="color:#f0ece2">${e.name}</td><td style="color:#7a8fa8">${e.jobs}</td><td style="color:#7a8fa8">${e.hours.toFixed(1)}hrs</td><td style="color:#68d391;font-weight:600;font-family:'Cinzel',serif">${fmt$(e.total)}</td></tr>`).join('')}
-      </tbody></table>`}
-    </div>`;
+function selectWeek(ws) { selectedWeek = ws; renderWeekly(); }
+
+// ── Summary ───────────────────────────────────────────────────────
+function renderSummary() {
+  const totalRevenue = jobs.reduce((s,j)=>s+j.totalPay,0);
+  const totalCompany = jobs.reduce((s,j)=>s+j.companyTake,0);
+  const totalPaid    = jobs.reduce((s,j)=>s+j.payouts.reduce((a,p)=>a+p.payout,0),0);
+  document.getElementById('summary-stats').innerHTML = `
+    <div class="stat-box"><div class="stat-label">Total Revenue</div><div class="stat-val">${fmt$(totalRevenue)}</div></div>
+    <div class="stat-box"><div class="stat-label">Company Kept</div><div class="stat-val" style="color:#c9a84c">${fmt$(totalCompany)}</div></div>
+    <div class="stat-box"><div class="stat-label">Total Paid Out</div><div class="stat-val" style="color:#68d391">${fmt$(totalPaid)}</div></div>`;
+  const map = {};
+  jobs.forEach(j=>j.payouts.forEach(p=>{
+    if (!map[p.name]) map[p.name]={jobs:0,hours:0,total:0};
+    map[p.name].jobs++; map[p.name].hours+=p.hours; map[p.name].total+=p.payout;
+  }));
+  const totals = Object.entries(map).map(([name,d])=>({name,...d})).sort((a,b)=>b.total-a.total);
+  const el = document.getElementById('summary-table');
+  if (totals.length===0) { el.innerHTML='<div class="empty-state" style="padding:20px;">No data yet.</div>'; return; }
+  el.innerHTML = `<table><thead><tr><th>Employee</th><th>Jobs</th><th>Total Hours</th><th>Total Earned</th></tr></thead><tbody>
+    ${totals.map(e=>`<tr><td style="color:#f0ece2">${e.name}</td><td style="color:#7a8fa8">${e.jobs}</td><td style="color:#7a8fa8">${e.hours.toFixed(1)}hrs</td><td style="color:#68d391;font-weight:600;font-family:'Cinzel',serif">${fmt$(e.total)}</td></tr>`).join('')}
+  </tbody></table>`;
 }
 
-function buildRoster() {
-  return `
-    <div class="section-title">Employee Roster</div>
-    <div class="card">
-      <p style="font-size:12px;color:#4e6a85;margin-bottom:16px">Add employees here so they appear in the job log dropdown.</p>
-      <div style="display:flex;gap:10px;margin-bottom:16px">
-        <input type="text" style="flex:1" placeholder="Employee name" value="${state.newEmpName}" oninput="setState({newEmpName:this.value})" onkeydown="if(event.key==='Enter')addEmployee()"/>
-        <button class="btn-primary" onclick="addEmployee()">Add</button>
-      </div>
-      <hr class="divider"/>
-      ${state.roster.map(name=>`
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #0f1e2e">
-          <span style="font-size:15px;color:#ddd9cf">${name}</span>
-          <button class="btn-danger" onclick="removeEmployee('${name}')">Remove</button>
-        </div>`).join('')}
-    </div>`;
+// ── Roster ────────────────────────────────────────────────────────
+function renderRoster() {
+  const list = document.getElementById('roster-list');
+  if (!list) return;
+  list.innerHTML = roster.map(name=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #0f1e2e;">
+      <span style="font-size:15px;color:#ddd9cf;">${name}</span>
+      <button class="btn-danger" onclick="removeEmployee('${name}')">Remove</button>
+    </div>`).join('');
 }
 
-function bindEvents() {}
+function addEmployee() {
+  const input = document.getElementById('new-emp-input');
+  const name = input.value.trim();
+  if (!name || roster.includes(name)) return;
+  roster.push(name);
+  input.value = '';
+  saveData();
+  renderRoster();
+}
 
-render();
+function removeEmployee(name) {
+  roster = roster.filter(n=>n!==name);
+  saveData();
+  renderRoster();
+}
 </script>
 </body>
 </html>
