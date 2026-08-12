@@ -12,8 +12,10 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
         run: |
-          apt-get install -y curl
-          curl "$SUPABASE_URL/rest/v1/?select=*&limit=1"
-            -H "apikey: $SUPABASE_KEY"
-            -H "Authorization: Bearer $SUPABASE_KEY"
-
+          python3 -c "
+          import urllib.request
+          req = urllib.request.Request('$SUPABASE_URL/rest/v1/')
+          req.add_header('apikey', '$SUPABASE_KEY')
+          urllib.request.urlopen(req)
+          print('Ping successful')
+          "
