@@ -1,4 +1,4 @@
- name: Keep Supabase Alive
+name: Keep Supabase Alive
 
 on:
   schedule:
@@ -10,7 +10,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Ping Supabase
-        run: |
-          curl -X GET "${{ secrets.SUPABASE_URL }}/rest/v1/?select=*&limit=1" \
-          -H "apikey: ${{ secrets.SUPABASE_KEY }}" \
-          -H "Authorization: Bearer ${{ secrets.SUPABASE_KEY }}"
+        run: curl -X GET "${{ secrets.SUPABASE_URL }}/rest/v1/?select=*&limit=1" -H "apikey: ${{ secrets.SUPABASE_KEY }}" -H "Authorization: Bearer ${{ secrets.SUPABASE_KEY }}"
+
