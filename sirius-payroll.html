@@ -9,11 +9,11 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: #07111f; color: #ddd9cf; font-family: 'Barlow', sans-serif; min-height: 100vh; }
-  input, select, button, textarea { font-family: 'Barlow', sans-serif; }
+  input, select, button { font-family: 'Barlow', sans-serif; }
   .header { background: #0b1929; border-bottom: 1px solid #162235; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
   .header-left { display: flex; align-items: center; gap: 12px; }
   .header-text .sub { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; letter-spacing: 0.3em; color: #c9a84c; text-transform: uppercase; }
-  .header-text .title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; color: #f0ece2; letter-spacing: 0.03em; }
+  .header-text .title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; color: #f0ece2; }
   .nav { display: flex; gap: 4px; flex-wrap: wrap; }
   .nav button { background: transparent; color: #7a8fa8; border: 1px solid #162235; border-radius: 6px; padding: 7px 13px; font-family: 'Barlow Condensed', sans-serif; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; }
   .nav button.active { background: #c9a84c; color: #07111f; border-color: #c9a84c; font-weight: 700; }
@@ -21,24 +21,25 @@
   .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: #3ecf8e; display: inline-block; margin-right: 7px; transition: background 0.3s; }
   .sync-dot.syncing { background: #c9a84c; }
   .sync-text { font-size: 11px; color: #4e6a85; }
+  .sync-actions { display: flex; gap: 8px; }
   .sync-actions button { background: transparent; border: 1px solid #162235; color: #4e6a85; border-radius: 5px; padding: 3px 10px; font-size: 11px; cursor: pointer; }
   .body { max-width: 740px; margin: 0 auto; padding: 24px 16px 60px; }
   .card { background: #0d1e30; border: 1px solid #162235; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+  .card.pending { border-color: #c9a84c44; background: #0d1e30; }
+  .pending-badge { display: inline-block; font-family: 'Barlow Condensed', sans-serif; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; background: #c9a84c22; color: #c9a84c; border: 1px solid #c9a84c44; padding: 2px 9px; border-radius: 20px; margin-bottom: 10px; }
   .section-title { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #c9a84c; margin-bottom: 16px; }
   .field-label { display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #4e6a85; margin-bottom: 6px; }
-  input[type=text], input[type=number], input[type=date], select {
-    width: 100%; background: #071118; border: 1px solid #162235; border-radius: 7px;
-    padding: 10px 12px; color: #ddd9cf; font-size: 14px; outline: none;
-  }
+  input[type=text], input[type=number], input[type=date], select { width: 100%; background: #071118; border: 1px solid #162235; border-radius: 7px; padding: 10px 12px; color: #ddd9cf; font-size: 14px; outline: none; }
+  input.needs-hours { border-color: #c9a84c66; background: #0d1a0a; }
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
   .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px; }
   .btn-primary { background: #c9a84c; color: #07111f; border: none; border-radius: 8px; padding: 12px 24px; font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; }
   .btn-ghost { background: transparent; color: #4e6a85; border: 1px solid #162235; border-radius: 8px; padding: 9px 16px; font-size: 12px; cursor: pointer; }
   .btn-danger { background: transparent; color: #e05555; border: 1px solid #3a1a1a; border-radius: 6px; padding: 5px 10px; font-size: 12px; cursor: pointer; }
+  .btn-gold { background: #c9a84c22; color: #c9a84c; border: 1px solid #c9a84c44; border-radius: 6px; padding: 7px 14px; font-size: 12px; cursor: pointer; font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.08em; text-transform: uppercase; }
   .emp-row { display: flex; gap: 8px; margin-bottom: 10px; align-items: flex-end; }
   .emp-row .emp-name { flex: 2; }
   .emp-row .emp-hrs { flex: 1; }
-  .preview-card { border-color: #1e3a26; }
   .stat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
   .stat-box { background: #071118; border: 1px solid #162235; border-radius: 8px; padding: 12px; text-align: center; }
   .stat-label { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #4e6a85; margin-bottom: 4px; }
@@ -62,13 +63,7 @@
   .lock-card { max-width: 400px; width: 100%; background: #0d1e30; border: 1px solid #162235; border-radius: 14px; padding: 32px; text-align: center; }
   .lock-error { color: #e05555; font-size: 13px; margin-bottom: 10px; }
   .lock-hint { font-size: 11px; color: #2e4060; margin-top: 18px; }
-  @media (max-width: 500px) {
-    .grid-3 { grid-template-columns: 1fr 1fr; }
-    .stat-grid { grid-template-columns: 1fr 1fr; }
-    .weekly-layout { flex-direction: column; }
-    .week-sidebar { width: 100%; }
-  }
-  #view-log, #view-history, #view-weekly, #view-summary, #view-employees { display: none; }
+  @media (max-width: 500px) { .grid-3 { grid-template-columns: 1fr 1fr; } .stat-grid { grid-template-columns: 1fr 1fr; } .weekly-layout { flex-direction: column; } .week-sidebar { width: 100%; } }
 </style>
 </head>
 <body>
@@ -77,7 +72,7 @@
 <div id="lock-screen" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;">
   <div style="max-width:400px;width:100%;text-align:center;">
     <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:10px;">
-      <svg width="44" height="44" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="sg0" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#F0E0B8"/><stop offset="50%" stop-color="#C9A84C"/><stop offset="100%" stop-color="#8B6914"/></radialGradient></defs><polygon points="50,2 54,44 50,48 46,44" fill="url(#sg0)"/><polygon points="98,50 56,54 52,50 56,46" fill="url(#sg0)"/><polygon points="50,98 46,56 50,52 54,56" fill="url(#sg0)"/><polygon points="2,50 44,46 48,50 44,54" fill="url(#sg0)"/><polygon points="79,21 55,47 50,48 51,43" fill="url(#sg0)"/><polygon points="79,79 53,53 52,48 57,49" fill="url(#sg0)"/><polygon points="21,79 47,53 52,52 51,57" fill="url(#sg0)"/><polygon points="21,21 47,47 48,52 43,51" fill="url(#sg0)"/><circle cx="50" cy="50" r="5" fill="#0A1628"/></svg>
+      <svg width="44" height="44" viewBox="0 0 100 100"><defs><radialGradient id="sg0" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#F0E0B8"/><stop offset="50%" stop-color="#C9A84C"/><stop offset="100%" stop-color="#8B6914"/></radialGradient></defs><polygon points="50,2 54,44 50,48 46,44" fill="url(#sg0)"/><polygon points="98,50 56,54 52,50 56,46" fill="url(#sg0)"/><polygon points="50,98 46,56 50,52 54,56" fill="url(#sg0)"/><polygon points="2,50 44,46 48,50 44,54" fill="url(#sg0)"/><polygon points="79,21 55,47 50,48 51,43" fill="url(#sg0)"/><polygon points="79,79 53,53 52,48 57,49" fill="url(#sg0)"/><polygon points="21,79 47,53 52,52 51,57" fill="url(#sg0)"/><polygon points="21,21 47,47 48,52 43,51" fill="url(#sg0)"/><circle cx="50" cy="50" r="5" fill="#0A1628"/></svg>
       <div>
         <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:0.3em;color:#c9a84c;text-transform:uppercase;">Sirius Window Cleaning</div>
         <div style="font-family:'Cormorant Garamond',serif;font-size:26px;color:#f0ece2;">Payroll Tracker</div>
@@ -88,18 +83,16 @@
       <p style="font-size:14px;color:#7a8fa8;margin-bottom:20px;">Tap Connect to load your payroll data across all devices.</p>
       <div id="lock-error" class="lock-error" style="display:none;"></div>
       <button class="btn-primary" id="connect-btn" style="width:100%;padding:13px;font-size:14px;" onclick="handleConnect()">Connect</button>
-      <p class="lock-hint">Your data syncs automatically across iPhone and iPad.</p>
+      <p class="lock-hint">Jobs sync automatically from Housecall Pro.</p>
     </div>
   </div>
 </div>
 
-<!-- MAIN APP (hidden until connected) -->
+<!-- MAIN APP -->
 <div id="main-app" style="display:none;">
-
-  <!-- Header -->
   <div class="header">
     <div class="header-left">
-      <svg width="38" height="38" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="sg1" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#F0E0B8"/><stop offset="50%" stop-color="#C9A84C"/><stop offset="100%" stop-color="#8B6914"/></radialGradient></defs><polygon points="50,2 54,44 50,48 46,44" fill="url(#sg1)"/><polygon points="98,50 56,54 52,50 56,46" fill="url(#sg1)"/><polygon points="50,98 46,56 50,52 54,56" fill="url(#sg1)"/><polygon points="2,50 44,46 48,50 44,54" fill="url(#sg1)"/><polygon points="79,21 55,47 50,48 51,43" fill="url(#sg1)"/><polygon points="79,79 53,53 52,48 57,49" fill="url(#sg1)"/><polygon points="21,79 47,53 52,52 51,57" fill="url(#sg1)"/><polygon points="21,21 47,47 48,52 43,51" fill="url(#sg1)"/><circle cx="50" cy="50" r="5" fill="#0A1628"/></svg>
+      <svg width="38" height="38" viewBox="0 0 100 100"><defs><radialGradient id="sg1" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#F0E0B8"/><stop offset="50%" stop-color="#C9A84C"/><stop offset="100%" stop-color="#8B6914"/></radialGradient></defs><polygon points="50,2 54,44 50,48 46,44" fill="url(#sg1)"/><polygon points="98,50 56,54 52,50 56,46" fill="url(#sg1)"/><polygon points="50,98 46,56 50,52 54,56" fill="url(#sg1)"/><polygon points="2,50 44,46 48,50 44,54" fill="url(#sg1)"/><polygon points="79,21 55,47 50,48 51,43" fill="url(#sg1)"/><polygon points="79,79 53,53 52,48 57,49" fill="url(#sg1)"/><polygon points="21,79 47,53 52,52 51,57" fill="url(#sg1)"/><polygon points="21,21 47,47 48,52 43,51" fill="url(#sg1)"/><circle cx="50" cy="50" r="5" fill="#0A1628"/></svg>
       <div class="header-text">
         <div class="sub">Sirius Window Cleaning</div>
         <div class="title">Payroll Tracker</div>
@@ -114,21 +107,20 @@
     </nav>
   </div>
 
-  <!-- Sync bar -->
   <div class="sync-bar">
     <div style="display:flex;align-items:center;">
       <span class="sync-dot" id="sync-dot"></span>
       <span class="sync-text" id="sync-text">Connected</span>
     </div>
     <div class="sync-actions">
-      <button onclick="refreshData()">↻ Refresh</button>
+      <button onclick="refreshAll()">↻ Refresh</button>
     </div>
   </div>
 
   <div class="body">
 
     <!-- LOG JOB -->
-    <div id="view-log">
+    <div id="view-log" style="display:none;">
       <div id="saved-banner" class="success-banner" style="display:none;">✓ Job saved and synced</div>
       <div class="card">
         <div class="section-title">Job Details</div>
@@ -138,9 +130,7 @@
         </div>
         <div class="grid-3">
           <div><label class="field-label">Service Type</label>
-            <select id="f-service">
-              <option>Window Cleaning</option><option>Gutter Cleaning</option><option>Solar Panel Cleaning</option><option>Screen Cleaning</option><option>Other</option>
-            </select>
+            <select id="f-service"><option>Window Cleaning</option><option>Gutter Cleaning</option><option>Solar Panel Cleaning</option><option>Screen Cleaning</option><option>Other</option></select>
           </div>
           <div><label class="field-label">Total Job Pay ($)</label><input type="number" id="f-pay" placeholder="e.g. 2069" oninput="updatePreview()"/></div>
           <div><label class="field-label">Company Cut (%)</label><input type="number" id="f-company" value="35" oninput="updatePreview()"/></div>
@@ -151,7 +141,7 @@
         <div id="emp-entries"></div>
         <button class="btn-ghost" onclick="addEntryRow()">+ Add Employee</button>
       </div>
-      <div class="card preview-card" id="preview-card" style="display:none;">
+      <div class="card" id="preview-card" style="display:none;border-color:#1e3a26;">
         <div class="section-title" style="color:#68d391;">Payout Preview</div>
         <div class="stat-grid" id="preview-stats"></div>
         <table><thead><tr><th>Employee</th><th>Hours</th><th>Share</th><th>Commission</th></tr></thead>
@@ -161,27 +151,25 @@
     </div>
 
     <!-- HISTORY -->
-    <div id="view-history">
+    <div id="view-history" style="display:none;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
         <div class="section-title" style="margin:0;" id="history-title">Job History</div>
         <div style="display:flex;align-items:center;gap:8px;">
           <label class="field-label" style="margin:0;">Filter:</label>
-          <select id="history-filter" style="width:auto;padding:6px 10px;font-size:12px;" onchange="renderHistory()">
-            <option>All</option>
-          </select>
+          <select id="history-filter" style="width:auto;padding:6px 10px;font-size:12px;" onchange="renderHistory()"><option>All</option></select>
         </div>
       </div>
       <div id="history-list"></div>
     </div>
 
     <!-- WEEKLY -->
-    <div id="view-weekly">
+    <div id="view-weekly" style="display:none;">
       <div class="section-title">Weekly Pay Breakdown</div>
       <div id="weekly-content"></div>
     </div>
 
     <!-- SUMMARY -->
-    <div id="view-summary">
+    <div id="view-summary" style="display:none;">
       <div class="section-title">Earnings Summary</div>
       <div class="stat-grid" id="summary-stats"></div>
       <div class="card">
@@ -191,7 +179,7 @@
     </div>
 
     <!-- ROSTER -->
-    <div id="view-employees">
+    <div id="view-employees" style="display:none;">
       <div class="section-title">Employee Roster</div>
       <div class="card">
         <p style="font-size:12px;color:#4e6a85;margin-bottom:16px;">Add employees here so they appear in the job log dropdown.</p>
@@ -210,48 +198,74 @@
 <script>
 const SUPABASE_URL = 'https://zbyzbiyozxvwamqrnjpb.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpieXpiaXlvenh2d2FtcXJuanBiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4ODU5NjAsImV4cCI6MjA5NjQ2MTk2MH0.LWF6w2VJWBWOYDCXGgf1hf9cKCjSgMsxnfWgHXDAYNs';
-const TABLE = 'payroll';
 
-let dbId = null;
 let jobs = [];
 let roster = ['Billy','Joey','Guerry'];
 let entryCount = 1;
 let selectedWeek = null;
+let currentView = 'log';
 let saveTimeout = null;
 
-// ── Supabase ──────────────────────────────────────────────────────
-async function sbFetch(path, opts={}) {
+// ── Supabase helpers ──────────────────────────────────────────────
+async function sb(path, opts={}) {
   const res = await fetch(SUPABASE_URL+'/rest/v1/'+path, {
     ...opts,
     headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer '+SUPABASE_KEY, 'Content-Type': 'application/json', Prefer: 'return=representation', ...(opts.headers||{}) }
   });
-  if (!res.ok) throw new Error(await res.text());
   const text = await res.text();
   return text ? JSON.parse(text) : null;
 }
-async function loadData() {
-  const rows = await sbFetch(TABLE+'?order=id.asc&limit=1');
-  return rows && rows.length > 0 ? { id: rows[0].id, ...rows[0].data } : null;
+
+// ── Load all jobs with their employees ────────────────────────────
+async function loadJobs() {
+  const [jobRows, empRows, rosterRow] = await Promise.all([
+    sb('jobs?order=created_at.desc'),
+    sb('job_employees?order=id.asc'),
+    sb('payroll?order=id.asc&limit=1')
+  ]);
+
+  // Load roster from old payroll table
+  if (rosterRow && rosterRow.length > 0 && rosterRow[0].data && rosterRow[0].data.roster) {
+    roster = rosterRow[0].data.roster;
+  }
+
+  // Combine jobs with their employees
+  jobs = (jobRows || []).map(j => ({
+    ...j,
+    payouts: (empRows || []).filter(e => e.job_id === j.id).map(e => ({
+      name: e.employee_name,
+      hours: e.hours,
+      pct: 0,
+      payout: 0,
+      emp_id: e.id
+    }))
+  }));
+
+  // Calculate payouts for jobs that have hours
+  jobs.forEach(j => recalcJob(j));
 }
-async function saveData() {
-  if (!dbId) return;
-  setSyncing(true);
-  try {
-    await sbFetch(TABLE+'?id=eq.'+dbId, { method:'PATCH', body: JSON.stringify({ data: { jobs, roster } }) });
-    setSynced();
-  } catch(e) { setSyncError(); }
+
+function recalcJob(j) {
+  const pool = j.total_pay * ((100 - j.company_pct) / 100);
+  const totalHrs = j.payouts.reduce((s,p) => s+(p.hours||0), 0);
+  j.payouts.forEach(p => {
+    p.pct = totalHrs > 0 ? (p.hours||0)/totalHrs : 0;
+    p.payout = pool * p.pct;
+  });
+  j.companyTake = j.total_pay * (j.company_pct/100);
+  j.isPending = j.payouts.length === 0 || j.payouts.every(p => !p.hours);
 }
-function scheduleSave() {
-  clearTimeout(saveTimeout);
-  saveTimeout = setTimeout(saveData, 1000);
+
+function hasPendingJobs() {
+  return jobs.some(j => j.isPending);
 }
 
 // ── Sync UI ───────────────────────────────────────────────────────
 function setSyncing(b) {
   const dot = document.getElementById('sync-dot');
   const txt = document.getElementById('sync-text');
-  if (dot) dot.className = 'sync-dot' + (b?' syncing':'');
-  if (txt) txt.textContent = b ? 'Saving…' : txt.textContent;
+  if (dot) dot.className = 'sync-dot'+(b?' syncing':'');
+  if (txt && b) txt.textContent = 'Saving…';
 }
 function setSynced() {
   setSyncing(false);
@@ -272,43 +286,33 @@ async function handleConnect() {
   btn.textContent = 'Connecting…'; btn.disabled = true;
   err.style.display = 'none';
   try {
-    const d = await loadData();
-    if (d) {
-      dbId = d.id;
-      jobs = d.jobs || [];
-      roster = d.roster || ['Billy','Joey','Guerry'];
-      document.getElementById('lock-screen').style.display = 'none';
-      document.getElementById('main-app').style.display = 'block';
-      showView('log');
-      setSynced();
-    } else {
-      err.textContent = 'Could not connect. Check your internet.';
-      err.style.display = 'block';
-      btn.textContent = 'Connect'; btn.disabled = false;
-    }
+    await loadJobs();
+    document.getElementById('lock-screen').style.display = 'none';
+    document.getElementById('main-app').style.display = 'block';
+    showView('log');
+    setSynced();
   } catch(e) {
     err.textContent = 'Connection failed. Try again.';
     err.style.display = 'block';
     btn.textContent = 'Connect'; btn.disabled = false;
   }
 }
-async function refreshData() {
+
+async function refreshAll() {
   setSyncing(true);
   try {
-    const d = await loadData();
-    if (d) { jobs = d.jobs||[]; roster = d.roster||['Billy','Joey','Guerry']; }
+    await loadJobs();
     setSynced();
     renderCurrentView();
   } catch(e) { setSyncError(); }
 }
 
 // ── Navigation ────────────────────────────────────────────────────
-let currentView = 'log';
 function showView(v) {
   ['log','history','weekly','summary','employees'].forEach(n => {
-    document.getElementById('view-'+n).style.display = n===v ? 'block' : 'none';
+    document.getElementById('view-'+n).style.display = n===v?'block':'none';
     const btn = document.getElementById('nav-'+n);
-    if (btn) btn.className = n===v ? 'active' : '';
+    if (btn) btn.className = n===v?'active':'';
   });
   currentView = v;
   if (v==='log') initLogView();
@@ -322,8 +326,9 @@ function renderCurrentView() { showView(currentView); }
 // ── Helpers ───────────────────────────────────────────────────────
 const fmt$ = n => new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(n||0);
 const fmtPct = n => (n*100).toFixed(1)+'%';
-const fmtDate = d => new Date(d+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+const fmtDate = d => { if(!d) return ''; return new Date(d+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); };
 const getWeekStart = dateStr => {
+  if (!dateStr) return new Date().toISOString().split('T')[0];
   const d = new Date(dateStr+'T12:00:00'), day = d.getDay();
   const mon = new Date(d); mon.setDate(d.getDate()+(day===0?-6:1-day));
   return mon.toISOString().split('T')[0];
@@ -333,36 +338,8 @@ const fmtWeekLabel = ws => {
   return s.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' – '+e.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
 };
 
-function getFormValues() {
-  const entries = [];
-  for (let i = 0; i < entryCount; i++) {
-    const nameEl = document.getElementById('entry-name-'+i);
-    const hrsEl  = document.getElementById('entry-hrs-'+i);
-    if (nameEl) entries.push({ name: nameEl.value, hours: hrsEl ? hrsEl.value : '' });
-  }
-  return {
-    customer: (document.getElementById('f-customer')||{}).value || '',
-    date:     (document.getElementById('f-date')||{}).value || '',
-    service:  (document.getElementById('f-service')||{}).value || 'Window Cleaning',
-    totalPay: (document.getElementById('f-pay')||{}).value || '',
-    companyPct: parseFloat((document.getElementById('f-company')||{}).value) || 35,
-    entries
-  };
-}
-
-function calcPayouts(f) {
-  const pay = parseFloat(f.totalPay)||0;
-  const pool = pay * ((100 - f.companyPct) / 100);
-  const totalHrs = f.entries.reduce((s,e)=>s+(parseFloat(e.hours)||0), 0);
-  return f.entries.map(e => {
-    const hrs = parseFloat(e.hours)||0, pct = totalHrs>0 ? hrs/totalHrs : 0;
-    return { name: e.name, hours: hrs, pct, payout: pool*pct };
-  });
-}
-
-// ── Log Job View ──────────────────────────────────────────────────
+// ── Log Job ───────────────────────────────────────────────────────
 function initLogView() {
-  // Set today's date if empty
   const dateEl = document.getElementById('f-date');
   if (dateEl && !dateEl.value) dateEl.value = new Date().toISOString().split('T')[0];
   renderEntryRows();
@@ -374,20 +351,16 @@ function renderEntryRows() {
   if (!container) return;
   let html = '';
   for (let i = 0; i < entryCount; i++) {
-    const savedName = window._entryNames ? window._entryNames[i] || roster[0] : roster[0];
-    const savedHrs  = window._entryHours ? window._entryHours[i] || '' : '';
+    const savedName = window._entryNames ? (window._entryNames[i]||roster[0]) : roster[0];
+    const savedHrs  = window._entryHours ? (window._entryHours[i]||'') : '';
     html += `<div class="emp-row">
-      <div class="emp-name">
-        ${i===0?'<label class="field-label">Employee</label>':''}
-        <select id="entry-name-${i}" onchange="updatePreview()">
-          ${roster.map(n=>`<option${n===savedName?' selected':''}>${n}</option>`).join('')}
-        </select>
+      <div class="emp-name">${i===0?'<label class="field-label">Employee</label>':''}
+        <select id="entry-name-${i}" onchange="updatePreview()">${roster.map(n=>`<option${n===savedName?' selected':''}>${n}</option>`).join('')}</select>
       </div>
-      <div class="emp-hrs">
-        ${i===0?'<label class="field-label">Hours</label>':''}
+      <div class="emp-hrs">${i===0?'<label class="field-label">Hours</label>':''}
         <input type="number" id="entry-hrs-${i}" placeholder="hrs" value="${savedHrs}" oninput="updatePreview()"/>
       </div>
-      <button class="btn-danger" style="${i===0?'margin-top:18px;':''} opacity:${entryCount>1?1:0.3}" onclick="removeEntryRow(${i})" ${entryCount<=1?'disabled':''}>×</button>
+      <button class="btn-danger" style="${i===0?'margin-top:18px;':''}opacity:${entryCount>1?1:0.3}" onclick="removeEntryRow(${i})" ${entryCount<=1?'disabled':''}>×</button>
     </div>`;
   }
   container.innerHTML = html;
@@ -407,8 +380,8 @@ function saveEntryValues() {
 function addEntryRow() {
   saveEntryValues();
   entryCount++;
-  if (!window._entryNames) window._entryNames = [];
-  if (!window._entryHours) window._entryHours = [];
+  window._entryNames = window._entryNames||[];
+  window._entryHours = window._entryHours||[];
   window._entryNames[entryCount-1] = roster[0];
   window._entryHours[entryCount-1] = '';
   renderEntryRows();
@@ -416,24 +389,51 @@ function addEntryRow() {
 }
 
 function removeEntryRow(i) {
-  if (entryCount <= 1) return;
+  if (entryCount<=1) return;
   saveEntryValues();
-  window._entryNames.splice(i, 1);
-  window._entryHours.splice(i, 1);
+  window._entryNames.splice(i,1);
+  window._entryHours.splice(i,1);
   entryCount--;
   renderEntryRows();
   updatePreview();
+}
+
+function getFormValues() {
+  const entries = [];
+  for (let i = 0; i < entryCount; i++) {
+    const n = document.getElementById('entry-name-'+i);
+    const h = document.getElementById('entry-hrs-'+i);
+    if (n) entries.push({name:n.value, hours:h?h.value:''});
+  }
+  return {
+    customer: (document.getElementById('f-customer')||{}).value||'',
+    date:     (document.getElementById('f-date')||{}).value||'',
+    service:  (document.getElementById('f-service')||{}).value||'Window Cleaning',
+    totalPay: (document.getElementById('f-pay')||{}).value||'',
+    companyPct: parseFloat((document.getElementById('f-company')||{}).value)||35,
+    entries
+  };
+}
+
+function calcPayouts(f) {
+  const pay = parseFloat(f.totalPay)||0;
+  const pool = pay*((100-f.companyPct)/100);
+  const totalHrs = f.entries.reduce((s,e)=>s+(parseFloat(e.hours)||0),0);
+  return f.entries.map(e => {
+    const hrs=parseFloat(e.hours)||0, pct=totalHrs>0?hrs/totalHrs:0;
+    return {name:e.name, hours:hrs, pct, payout:pool*pct};
+  });
 }
 
 function updatePreview() {
   const f = getFormValues();
   const card = document.getElementById('preview-card');
   if (!card) return;
-  if (!f.totalPay || parseFloat(f.totalPay) <= 0) { card.style.display='none'; return; }
+  if (!f.totalPay||parseFloat(f.totalPay)<=0) { card.style.display='none'; return; }
   const pay = parseFloat(f.totalPay);
-  const pool = pay * ((100-f.companyPct)/100);
+  const pool = pay*((100-f.companyPct)/100);
   const payouts = calcPayouts(f);
-  card.style.display = 'block';
+  card.style.display='block';
   document.getElementById('preview-stats').innerHTML = `
     <div class="stat-box"><div class="stat-label">Total Job</div><div class="stat-val">${fmt$(pay)}</div></div>
     <div class="stat-box"><div class="stat-label">Company (${f.companyPct}%)</div><div class="stat-val" style="color:#c9a84c">${fmt$(pay*f.companyPct/100)}</div></div>
@@ -443,92 +443,197 @@ function updatePreview() {
   ).join('');
 }
 
-function submitJob() {
+async function submitJob() {
   const f = getFormValues();
-  if (!f.customer || !f.totalPay) return;
-  const payouts = calcPayouts(f);
-  const job = {
-    id: Date.now(), customer: f.customer, date: f.date, service: f.service,
-    totalPay: parseFloat(f.totalPay), companyPct: f.companyPct,
-    companyTake: parseFloat(f.totalPay)*(f.companyPct/100), payouts
-  };
-  jobs.unshift(job);
-  saveData();
-  // Reset form
-  document.getElementById('f-customer').value = '';
-  document.getElementById('f-pay').value = '';
-  document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
-  entryCount = 1;
-  window._entryNames = [roster[0]];
-  window._entryHours = [''];
-  renderEntryRows();
-  updatePreview();
-  const banner = document.getElementById('saved-banner');
-  banner.style.display = 'block';
-  setTimeout(()=>banner.style.display='none', 2500);
-  showView('history');
+  if (!f.customer||!f.totalPay) return;
+  setSyncing(true);
+  try {
+    const jobRes = await sb('jobs', {
+      method:'POST',
+      body: JSON.stringify({
+        customer: f.customer, date: f.date, service: f.service,
+        total_pay: parseFloat(f.totalPay), company_pct: f.companyPct,
+        hcp_job_id: null
+      })
+    });
+    const jobId = jobRes[0].id;
+    for (const e of f.entries) {
+      await sb('job_employees', {
+        method:'POST',
+        body: JSON.stringify({job_id:jobId, employee_name:e.name, hours:parseFloat(e.hours)||null})
+      });
+    }
+    await loadJobs();
+    setSynced();
+    document.getElementById('f-customer').value='';
+    document.getElementById('f-pay').value='';
+    document.getElementById('f-date').value=new Date().toISOString().split('T')[0];
+    entryCount=1; window._entryNames=[roster[0]]; window._entryHours=[''];
+    renderEntryRows(); updatePreview();
+    const banner = document.getElementById('saved-banner');
+    banner.style.display='block';
+    setTimeout(()=>banner.style.display='none',2500);
+    showView('history');
+  } catch(e) { setSyncError(); }
 }
 
-// ── History ───────────────────────────────────────────────────────
+// ── History with pending jobs highlighted ─────────────────────────
 function renderHistory() {
-  const filter = (document.getElementById('history-filter')||{}).value || 'All';
-  // Update filter options
+  const filter = (document.getElementById('history-filter')||{}).value||'All';
   const sel = document.getElementById('history-filter');
   if (sel) {
     const cur = sel.value;
-    sel.innerHTML = '<option>All</option>' + roster.map(n=>`<option${n===cur?' selected':''}>${n}</option>`).join('');
+    sel.innerHTML = '<option>All</option>'+roster.map(n=>`<option${n===cur?' selected':''}>${n}</option>`).join('');
   }
   const filtered = filter==='All' ? jobs : jobs.filter(j=>j.payouts.some(p=>p.name===filter));
   const title = document.getElementById('history-title');
   if (title) title.textContent = `Job History (${filtered.length})`;
   const list = document.getElementById('history-list');
   if (!list) return;
+
   if (filtered.length===0) { list.innerHTML='<div class="empty-state">No jobs logged yet.</div>'; return; }
-  list.innerHTML = filtered.map(j=>`
-    <div class="card">
+
+  const pendingCount = filtered.filter(j=>j.isPending).length;
+  let html = '';
+
+  if (pendingCount > 0) {
+    html += `<div style="background:#c9a84c11;border:1px solid #c9a84c33;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:#c9a84c;">
+      ⚠ ${pendingCount} job${pendingCount>1?'s':''} imported from Housecall Pro — tap to fill in hours and calculate pay.
+    </div>`;
+  }
+
+  html += filtered.map(j => {
+    const pending = j.isPending;
+    return `<div class="card${pending?' pending':''}">
+      ${pending?'<div class="pending-badge">⏳ Needs Hours</div>':''}
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
         <div>
-          <div style="font-size:16px;color:#f0ece2;margin-bottom:4px;">${j.customer}</div>
-          <div style="display:flex;gap:8px;align-items:center;"><span style="font-size:12px;color:#4e6a85;">${fmtDate(j.date)}</span><span class="tag">${j.service}</span></div>
+          <div style="font-size:16px;color:#f0ece2;margin-bottom:4px;">${j.customer||'—'}</div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            <span style="font-size:12px;color:#4e6a85;">${fmtDate(j.date)}</span>
+            ${j.service?`<span class="tag">${j.service}</span>`:''}
+            ${j.hcp_job_id?'<span style="font-size:10px;color:#2e4060;">HCP</span>':''}
+          </div>
         </div>
         <div style="text-align:right;">
-          <div style="font-family:'Cinzel',serif;font-size:18px;color:#f0ece2;">${fmt$(j.totalPay)}</div>
+          <div style="font-family:\'Cinzel\',serif;font-size:18px;color:#f0ece2;">${fmt$(j.total_pay)}</div>
           <div style="font-size:11px;color:#4e6a85;">Co. kept ${fmt$(j.companyTake)}</div>
         </div>
       </div>
-      <hr class="divider"/>
-      <table><thead><tr><th>Employee</th><th>Hours</th><th>Share</th><th>Commission</th></tr></thead><tbody>
-        ${j.payouts.map(p=>`<tr><td>${p.name}</td><td style="color:#7a8fa8">${p.hours}hrs</td><td style="color:#c9a84c">${fmtPct(p.pct)}</td><td style="color:#68d391;font-weight:600">${fmt$(p.payout)}</td></tr>`).join('')}
-      </tbody></table>
-      <div style="text-align:right;margin-top:10px;"><button class="btn-danger" onclick="deleteJob(${j.id})">Delete</button></div>
-    </div>`).join('');
+      ${pending ? renderPendingEmployees(j) : renderJobPayouts(j)}
+      <div style="text-align:right;margin-top:10px;display:flex;gap:8px;justify-content:flex-end;">
+        ${pending?`<button class="btn-gold" onclick="saveHours(${j.id})">Save Hours</button>`:''}
+        <button class="btn-danger" onclick="deleteJob(${j.id})">Delete</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  list.innerHTML = html;
 }
 
-function deleteJob(id) {
+function renderPendingEmployees(j) {
+  if (j.payouts.length === 0) {
+    // HCP job with no employees yet — show roster dropdowns
+    return `<div id="pending-emps-${j.id}">
+      <div style="font-size:12px;color:#c9a84c;margin-bottom:8px;">Add employees and hours:</div>
+      <div id="emp-rows-${j.id}">
+        <div class="emp-row">
+          <div class="emp-name"><select id="pname-${j.id}-0">${roster.map(n=>`<option>${n}</option>`).join('')}</select></div>
+          <div class="emp-hrs"><input type="number" class="needs-hours" id="phrs-${j.id}-0" placeholder="hrs"/></div>
+        </div>
+      </div>
+      <button class="btn-ghost" style="margin-top:6px;font-size:11px;" onclick="addPendingRow(${j.id})">+ Add employee</button>
+    </div>`;
+  }
+  // HCP job with employees but no hours
+  return `<div>
+    <div style="font-size:12px;color:#c9a84c;margin-bottom:8px;">Fill in hours for each employee:</div>
+    ${j.payouts.map((p,i)=>`
+      <div class="emp-row">
+        <div class="emp-name"><input type="text" value="${p.name}" id="pname-${j.id}-${i}" style="color:#ddd9cf;"/></div>
+        <div class="emp-hrs"><input type="number" class="needs-hours" id="phrs-${j.id}-${i}" placeholder="hrs" value="${p.hours||''}"/></div>
+      </div>`).join('')}
+  </div>`;
+}
+
+function renderJobPayouts(j) {
+  if (!j.payouts || j.payouts.length===0) return '';
+  return `<hr class="divider"/>
+    <table><thead><tr><th>Employee</th><th>Hours</th><th>Share</th><th>Commission</th></tr></thead><tbody>
+      ${j.payouts.map(p=>`<tr><td>${p.name}</td><td style="color:#7a8fa8">${p.hours}hrs</td><td style="color:#c9a84c">${fmtPct(p.pct)}</td><td style="color:#68d391;font-weight:600">${fmt$(p.payout)}</td></tr>`).join('')}
+    </tbody></table>`;
+}
+
+let pendingRowCounts = {};
+function addPendingRow(jobId) {
+  pendingRowCounts[jobId] = (pendingRowCounts[jobId]||1) + 1;
+  const i = pendingRowCounts[jobId] - 1;
+  const container = document.getElementById('emp-rows-'+jobId);
+  if (!container) return;
+  const div = document.createElement('div');
+  div.className = 'emp-row';
+  div.innerHTML = `<div class="emp-name"><select id="pname-${jobId}-${i}">${roster.map(n=>`<option>${n}</option>`).join('')}</select></div>
+    <div class="emp-hrs"><input type="number" class="needs-hours" id="phrs-${jobId}-${i}" placeholder="hrs"/></div>`;
+  container.appendChild(div);
+}
+
+async function saveHours(jobId) {
+  const job = jobs.find(j=>j.id===jobId);
+  if (!job) return;
+  setSyncing(true);
+  try {
+    const count = pendingRowCounts[jobId] || Math.max(job.payouts.length, 1);
+    const entries = [];
+    for (let i = 0; i < count; i++) {
+      const nameEl = document.getElementById(`pname-${jobId}-${i}`);
+      const hrsEl  = document.getElementById(`phrs-${jobId}-${i}`);
+      if (nameEl && hrsEl && hrsEl.value) {
+        entries.push({name: nameEl.value, hours: parseFloat(hrsEl.value)});
+      }
+    }
+    if (entries.length === 0) { setSyncError(); return; }
+
+    // Delete existing employees for this job and re-insert
+    await sb(`job_employees?job_id=eq.${jobId}`, {method:'DELETE', headers:{Prefer:''}});
+    for (const e of entries) {
+      await sb('job_employees', {method:'POST', body:JSON.stringify({job_id:jobId, employee_name:e.name, hours:e.hours})});
+    }
+    await loadJobs();
+    setSynced();
+    renderHistory();
+  } catch(e) { setSyncError(); }
+}
+
+async function deleteJob(id) {
   if (!confirm('Delete this job?')) return;
-  jobs = jobs.filter(j=>j.id!==id);
-  saveData();
-  renderHistory();
+  setSyncing(true);
+  try {
+    await sb(`job_employees?job_id=eq.${id}`, {method:'DELETE', headers:{Prefer:''}});
+    await sb(`jobs?id=eq.${id}`, {method:'DELETE', headers:{Prefer:''}});
+    jobs = jobs.filter(j=>j.id!==id);
+    setSynced();
+    renderHistory();
+  } catch(e) { setSyncError(); }
 }
 
 // ── Weekly ────────────────────────────────────────────────────────
 function weeklyData() {
   const weeks = {};
-  jobs.forEach(j=>{
+  jobs.filter(j=>!j.isPending).forEach(j=>{
     const ws = getWeekStart(j.date);
     if (!weeks[ws]) weeks[ws]={jobs:[],employees:{}};
     weeks[ws].jobs.push(j);
     j.payouts.forEach(p=>{
       if (!weeks[ws].employees[p.name]) weeks[ws].employees[p.name]={hours:0,payout:0,jobs:0};
-      weeks[ws].employees[p.name].hours+=p.hours;
-      weeks[ws].employees[p.name].payout+=p.payout;
+      weeks[ws].employees[p.name].hours+=p.hours||0;
+      weeks[ws].employees[p.name].payout+=p.payout||0;
       weeks[ws].employees[p.name].jobs++;
     });
   });
   return Object.entries(weeks).sort((a,b)=>b[0].localeCompare(a[0])).map(([ws,d])=>({
     weekStart:ws, label:fmtWeekLabel(ws), jobCount:d.jobs.length,
-    totalRevenue:d.jobs.reduce((s,j)=>s+j.totalPay,0),
-    totalPaid:d.jobs.reduce((s,j)=>s+j.payouts.reduce((a,p)=>a+p.payout,0),0),
+    totalRevenue:d.jobs.reduce((s,j)=>s+j.total_pay,0),
+    totalPaid:d.jobs.reduce((s,j)=>s+j.payouts.reduce((a,p)=>a+(p.payout||0),0),0),
     employees:Object.entries(d.employees).map(([name,e])=>({name,...e})).sort((a,b)=>b.payout-a.payout)
   }));
 }
@@ -537,10 +642,10 @@ function renderWeekly() {
   const weeks = weeklyData();
   const content = document.getElementById('weekly-content');
   if (!content) return;
-  if (weeks.length===0) { content.innerHTML='<div class="empty-state">No jobs logged yet.</div>'; return; }
-  const activeWeek = selectedWeek || weeks[0].weekStart;
-  const aw = weeks.find(w=>w.weekStart===activeWeek) || weeks[0];
-  const weekJobs = jobs.filter(j=>getWeekStart(j.date)===aw.weekStart);
+  if (weeks.length===0) { content.innerHTML='<div class="empty-state">No completed jobs yet.</div>'; return; }
+  const activeWeek = selectedWeek||weeks[0].weekStart;
+  const aw = weeks.find(w=>w.weekStart===activeWeek)||weeks[0];
+  const weekJobs = jobs.filter(j=>!j.isPending&&getWeekStart(j.date)===aw.weekStart);
   content.innerHTML = `
     <div class="weekly-layout">
       <div class="week-sidebar">
@@ -563,33 +668,34 @@ function renderWeekly() {
         <div class="card">
           <div class="section-title">Jobs This Week</div>
           ${weekJobs.map(j=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #0f1e2e;">
-            <div><div style="font-size:14px;color:#ddd9cf;">${j.customer}</div><div style="font-size:11px;color:#4e6a85;margin-top:2px;">${fmtDate(j.date)} · ${j.service}</div></div>
-            <div style="font-size:14px;color:#f0ece2;font-weight:600;">${fmt$(j.totalPay)}</div>
+            <div><div style="font-size:14px;color:#ddd9cf;">${j.customer||'—'}</div><div style="font-size:11px;color:#4e6a85;margin-top:2px;">${fmtDate(j.date)}${j.service?' · '+j.service:''}</div></div>
+            <div style="font-size:14px;color:#f0ece2;font-weight:600;">${fmt$(j.total_pay)}</div>
           </div>`).join('')}
         </div>
       </div>
     </div>`;
 }
 
-function selectWeek(ws) { selectedWeek = ws; renderWeekly(); }
+function selectWeek(ws) { selectedWeek=ws; renderWeekly(); }
 
 // ── Summary ───────────────────────────────────────────────────────
 function renderSummary() {
-  const totalRevenue = jobs.reduce((s,j)=>s+j.totalPay,0);
-  const totalCompany = jobs.reduce((s,j)=>s+j.companyTake,0);
-  const totalPaid    = jobs.reduce((s,j)=>s+j.payouts.reduce((a,p)=>a+p.payout,0),0);
+  const completed = jobs.filter(j=>!j.isPending);
+  const totalRevenue = completed.reduce((s,j)=>s+j.total_pay,0);
+  const totalCompany = completed.reduce((s,j)=>s+j.companyTake,0);
+  const totalPaid    = completed.reduce((s,j)=>s+j.payouts.reduce((a,p)=>a+(p.payout||0),0),0);
   document.getElementById('summary-stats').innerHTML = `
     <div class="stat-box"><div class="stat-label">Total Revenue</div><div class="stat-val">${fmt$(totalRevenue)}</div></div>
     <div class="stat-box"><div class="stat-label">Company Kept</div><div class="stat-val" style="color:#c9a84c">${fmt$(totalCompany)}</div></div>
     <div class="stat-box"><div class="stat-label">Total Paid Out</div><div class="stat-val" style="color:#68d391">${fmt$(totalPaid)}</div></div>`;
-  const map = {};
-  jobs.forEach(j=>j.payouts.forEach(p=>{
-    if (!map[p.name]) map[p.name]={jobs:0,hours:0,total:0};
-    map[p.name].jobs++; map[p.name].hours+=p.hours; map[p.name].total+=p.payout;
+  const map={};
+  completed.forEach(j=>j.payouts.forEach(p=>{
+    if(!map[p.name]) map[p.name]={jobs:0,hours:0,total:0};
+    map[p.name].jobs++; map[p.name].hours+=p.hours||0; map[p.name].total+=p.payout||0;
   }));
   const totals = Object.entries(map).map(([name,d])=>({name,...d})).sort((a,b)=>b.total-a.total);
   const el = document.getElementById('summary-table');
-  if (totals.length===0) { el.innerHTML='<div class="empty-state" style="padding:20px;">No data yet.</div>'; return; }
+  if (totals.length===0) { el.innerHTML='<div class="empty-state" style="padding:20px;">No completed jobs yet.</div>'; return; }
   el.innerHTML = `<table><thead><tr><th>Employee</th><th>Jobs</th><th>Total Hours</th><th>Total Earned</th></tr></thead><tbody>
     ${totals.map(e=>`<tr><td style="color:#f0ece2">${e.name}</td><td style="color:#7a8fa8">${e.jobs}</td><td style="color:#7a8fa8">${e.hours.toFixed(1)}hrs</td><td style="color:#68d391;font-weight:600;font-family:'Cinzel',serif">${fmt$(e.total)}</td></tr>`).join('')}
   </tbody></table>`;
@@ -606,20 +712,32 @@ function renderRoster() {
     </div>`).join('');
 }
 
-function addEmployee() {
+async function addEmployee() {
   const input = document.getElementById('new-emp-input');
   const name = input.value.trim();
-  if (!name || roster.includes(name)) return;
+  if (!name||roster.includes(name)) return;
   roster.push(name);
-  input.value = '';
-  saveData();
+  input.value='';
+  await saveRoster();
   renderRoster();
 }
 
-function removeEmployee(name) {
+async function removeEmployee(name) {
   roster = roster.filter(n=>n!==name);
-  saveData();
+  await saveRoster();
   renderRoster();
+}
+
+async function saveRoster() {
+  // Save roster back to old payroll table
+  try {
+    const rows = await sb('payroll?order=id.asc&limit=1');
+    if (rows && rows.length > 0) {
+      const data = rows[0].data || {};
+      data.roster = roster;
+      await sb(`payroll?id=eq.${rows[0].id}`, {method:'PATCH', body:JSON.stringify({data})});
+    }
+  } catch(e) {}
 }
 </script>
 </body>
